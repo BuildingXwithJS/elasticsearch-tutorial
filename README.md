@@ -1,6 +1,6 @@
-# Elasticsearch tutorial
+# Elasticsearch with Node.js tutorial
 
-> Free open-source in-depth tutorial on elasticsearch
+> Free open-source in-depth tutorial on elasticsearch with node.js
 
 This repository contains code and related materials for [introduction to Elasticsearch]() video.
 
@@ -8,7 +8,8 @@ This repository contains code and related materials for [introduction to Elastic
 
 These are two simple Elasticsearch applications that do following things:
 
-* `elastic-stack` demonstrates usage of Elasticsearch alogn with Kibana and Logstash for logging
+* `elastic-stack` demonstrates usage of Elasticsearch alogn with Kibana and Logstash for logging with
+  [pino.js](https://github.com/pinojs/pino)
 * `search` demonstrates usage of Elasticsearch for data querying (based on OSMNames)
 
 Data used for search example can be [found here](https://github.com/OSMNames/OSMNames/releases/tag/v2.0.3)
