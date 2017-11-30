@@ -1,0 +1,53 @@
+version: '3'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.0
+    environment:
+      - 'http.host=0.0.0.0'
+      - 'transport.host=127.0.0.1'
+      - 'ELASTIC_PASSWORD=asdfgh'
+    ports:
+      - 9200:9200
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.0.0
+    environment:
+      - ELASTICSEARCH_USERNAME=kibana
+      - ELASTICSEARCH_PASSWORD=asdfgh
+    ports:
+      - '5601:5601'
+    depends_on:
+      - 'elasticsearch'
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:6.0.0
+    environment:
+      - 'xpack.monitoring.elasticsearch.password=asdfgh'
+    volumes:
+      - ./esconfig/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    ports:
+      - 5000:5000
+    depends_on:
+      - 'elasticsearch'
+      - 'setup_logstash'
+
+  # Run a short-lived container to set up Logstash.
+  setup_logstash:
+    image: centos:7
+    volumes:
+      - './escripts/setup-logstash.sh:/usr/local/bin/setup-logstash.sh:ro'
+    command: ['/bin/bash', '-c', 'cat /usr/local/bin/setup-logstash.sh | tr -d "\r" | bash']
+    environment:
+      - 'ELASTIC_PASSWORD=asdfgh'
+    depends_on:
+      - 'elasticsearch'
+
+  setup_kibana:
+    image: centos:7
+    volumes:
+      - './escripts/setup-kibana.sh:/usr/local/bin/setup-kibana.sh:ro'
+    command: ['/bin/bash', '-c', 'cat /usr/local/bin/setup-kibana.sh | tr -d "\r" | bash']
+    environment:
+      - 'ELASTIC_PASSWORD=asdfgh'
+    depends_on:
+      - 'elasticsearch'
